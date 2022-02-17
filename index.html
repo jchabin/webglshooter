@@ -795,9 +795,10 @@
         if(Math.hypot(me.data.x - players[i].x, me.data.y - players[i].y, me.data.z - players[i].z) < 20){
           var pv = glMatrix.vec4.fromValues(players[i].x, players[i].y + 2, players[i].z, 1);
           glMatrix.vec4.transformMat4(pv, pv, modelMat);
-          glMatrix.vec4.transformMat4(pv, pv, projMat);
+          glMatrix.vec4.transformMat4(pv, pv, mouse[1] ? zoomMat : projMat);
           pLabels[i].style.display = "";
-          console.log(pv);
+          if(pv[2] < 0)
+            pLabels[i].style.display = "none";
           pLabels[i].style.left = (pv[0] / pv[2] + 1) / 2 * 100 + "vw";
           pLabels[i].style.top = -(pv[1] / pv[2] - 1) / 2 * 100 + "vh";
         }else
