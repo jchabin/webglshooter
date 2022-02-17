@@ -52,6 +52,11 @@
     display: inline-block;
     cursor: pointer;
     float: right;
+    transform: translateX(200%);
+    transition: transform .2s;
+  }
+  #start.ready{
+    transform: translateX(0);
   }
   #start:hover{
     background: #EEE;
@@ -342,6 +347,8 @@
     }
   }
 
+  var loadingProgress = 0;
+
   var ObjectList = [];
   class ObjectGL{
     loadObj(e){
@@ -414,11 +421,17 @@
       gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(fi), gl.STATIC_DRAW);
       this.ready = true;
 
+      loadingProgress--;
+
+      if(loadingProgress == 0)
+        document.getElementById("start").className = "ready";
+
       for(var i = 0; i < this.duplicates.length; i++)
         this.copyTo(this.duplicates[i]);
     }
     constructor(obj, shader, img){
       if(obj){
+        loadingProgress++;
         var x = new XMLHttpRequest();
         x.onload = e => this.loadObj(e);
         x.open("GET", obj);
